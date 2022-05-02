@@ -1,0 +1,43 @@
+class Solution {
+    public boolean hasPath(int[][] maze, int[] start, int[] destination) {
+        //visited array to track the empty spaces "0" visited
+        // queue because we are using bfs 
+        Queue<int[]> queue = new LinkedList<>();
+        boolean visited[][] = new boolean[maze.length][maze[0].length];
+        
+        // dierctions for up down left and right
+        int[][] dirs = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+        
+        queue.add(start);
+            
+        while(!queue.isEmpty()){
+            int[] temp = queue.poll();
+            
+            // if we find that the destination has reacehed we can return true
+            if(temp[0] == destination[0] && temp[1] == destination[1]){
+                return true;
+            }
+                // let's viist up and owna dn left and right for temp array 
+            for(int[] dir: dirs){
+                    // we keep adding the direction until we reach a potitn where we hit the wall
+                int row = temp[0] + dir[0];
+                int col = temp[1] + dir[1];
+                    
+                while(row >= 0 && col >= 0 && row < maze.length && col < maze[0].length && maze[row][col] == 0){
+                    row += dir[0];
+                    col += dir[1];
+                }
+                // once we hit the wall, we have to store the previous values of row and col in queue and mark it visited
+                
+                while(!visited[row - dir[0]][col - dir[1]]){
+                    queue.add(new int[]{row - dir[0], col - dir[1]}); // store the row and col value in queue
+                    visited[row - dir[0]][col - dir[1]] = true;
+                }
+            }
+        }
+        return false;
+    }
+}
+
+// tc: O(mn)
+// sc: O(mn)
